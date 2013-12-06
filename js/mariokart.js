@@ -127,19 +127,21 @@ var mariokart = (function () {
     var containerId = "live-map"
       , mapOptions = {}
       , map
-      , smCaltrain = new google.maps.LatLng(37.568273,-122.32402)
       ;
     
-    mapOptions.center = localmotionHQ;
+    mapOptions.center = localmotionHQ;    
     mapOptions.zoom = 15;
     
     map = new google.maps.Map(document.getElementById(containerId), mapOptions);
-    
-    new google.maps.Marker({ position: smCaltrain
-                           , map: map
-                           , title:"BANANA!"
-                           , icon: "assets/img/banana-roadsign-small.png"
-                           });
+        
+    bananaPeelsPositions.forEach(function(banana) {
+      new google.maps.Marker({ position: new google.maps.LatLng(banana.lat - 0.0008, banana.lon)
+                             , map: map
+                             , title:"Banana"
+                             , icon: "assets/img/banana-roadsign-small.png"
+                             });    
+    });
+
   };
   
   // Return mariokart opbject
