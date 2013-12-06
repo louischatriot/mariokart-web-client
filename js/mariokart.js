@@ -127,12 +127,19 @@ var mariokart = (function () {
     var containerId = "live-map"
       , mapOptions = {}
       , map
+      , smCaltrain = new google.maps.LatLng(37.568273,-122.32402)
       ;
     
     mapOptions.center = localmotionHQ;
     mapOptions.zoom = 15;
     
     map = new google.maps.Map(document.getElementById(containerId), mapOptions);
+    
+    new google.maps.Marker({ position: smCaltrain
+                           , map: map
+                           , title:"BANANA!"
+                           , icon: "assets/img/banana-roadsign-small.png"
+                           });
   };
   
   // Return mariokart opbject
