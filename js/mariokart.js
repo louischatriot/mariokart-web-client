@@ -28,34 +28,35 @@ var mariokart = (function () {
     // });
     
 
-    // this.updateEventLog(function (err) {
-      // if (err) { return; }
-      
-      // self.redrawEventLog();
-    // });
+    this.updateEventLog(function (err) {      
+      self.redrawEventLog();
+    });
     
 
     
     
-    // Draw map then update it in real time
+    // Draw map
     this.updateBananaPeelsPositions(function (err) {
       this.updateCarsPositions(function (err) {
         self.redrawMap();
       });
     });
     
+    // Update everything real time
     var thei = setInterval(function() {
       self.updateCarsPositions(function(err) {
         self.replaceCarsMarkers();      
       });
       self.updateBananaPeelsPositions(function(err) {
         self.replaceBananasMarkers();      
+      });
+      this.updateEventLog(function (err) {      
+        self.redrawEventLog();
       });      
     }, 800);
     
-    
     setTimeout(function () {
-      clearInterval(thei);
+      // clearInterval(thei);
     }, 5000);
   };
 
@@ -92,6 +93,9 @@ var mariokart = (function () {
     var callback = cb || function () {};
     
     $.ajax({ url: apiRoot + "/su/mariokart/api/lastEvents" }).done(function (data) {
+      console.log('--------------');
+      console.log(data);
+    
       data.forEach(function (item) {
         item.timestamp = new Date(item.timestamp);
         item.timeago = moment(item.timestamp).fromNow();
@@ -102,6 +106,7 @@ var mariokart = (function () {
       data.forEach(function (item) {
         if (eventLogAlreadySeen[item.hashCode]) { return; }   // This event is already in the event log
         eventLog.unshift(item);
+        eventLogAlreadySeen[item.hashCode] = true;
       });
       return callback(null);
     }).fail(function () {
@@ -123,7 +128,6 @@ var mariokart = (function () {
       events.push(eventLog[i]);
     }
       
-    console.log(events);
     $container.html(Mustache.render(eventLogTemplate, { events: events }));
   };
   

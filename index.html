@@ -17,18 +17,18 @@
 
       <div id="leaderboard"></div>
 
-      <div id="event-log"></div>
+     
       
 
     
-      <div class="container">
+      <div class="container" id="main-container">
         <div class="row">
-          <div class="span9">
-            dfggdgfgd
+          <div class="col-md-9">
+            <div id="live-map"></div>
           </div>
           
-          <div class="span3">
-            hfddfhh
+          <div class="col-md-3">
+            <div id="event-log"></div>
           </div>      
         </div>
       </div>
@@ -45,18 +45,16 @@
       </div>
 
       <div id="event-log-template" style="display: none;">
-        <h1>Event log</h1>
+        <h1>Battlefield status</h1>
         <ul>
           {{#events}}
             <li>
-            {{timeago}}: 
-            
             {{#SLIPPED_ON_BANANA_PEEL}}
-              {{byUser.name}} slipped on a banana peel dropped by {{additionalData.droppedBy.name}}
+              {{byUser.name}} slipped on a banana peel dropped by {{additionalData.droppedBy.name}}!
             {{/SLIPPED_ON_BANANA_PEEL}}
             
             {{#BANANA_PEEL_DROPPED}}
-              {{byUser.name}} dropped a banana peel somewhere, be careful where you drive ...
+              {{byUser.name}} dropped a banana peel somewhere
             {{/BANANA_PEEL_DROPPED}}
             </li>
           {{/events}}
