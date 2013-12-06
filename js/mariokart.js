@@ -34,18 +34,29 @@ var mariokart = (function () {
       // self.redrawEventLog();
     // });
     
+
+    
+    
+    // Draw map then update it in real time
     this.updateBananaPeelsPositions(function (err) {
-      if (err) { return; }
-      
       this.updateCarsPositions(function (err) {
-        if (err) { return; }      
-      
-        console.log("=================");
-        console.log(bananaPeelsPositions);
-        console.log(carsPositions);
         self.redrawMap();
       });
     });
+    
+    var thei = setInterval(function() {
+      self.updateCarsPositions(function(err) {
+        self.replaceCarsMarkers();      
+      });
+      self.updateBananaPeelsPositions(function(err) {
+        self.replaceBananasMarkers();      
+      });      
+    }, 800);
+    
+    
+    setTimeout(function () {
+      clearInterval(thei);
+    }, 5000);
   };
 
   /**
@@ -141,7 +152,7 @@ var mariokart = (function () {
       carsPositions = data;
       return callback(null);
     }).fail(function () {
-      console.log("Couldn't get the current positions of banana peels")
+      console.log("Couldn't get the current positions of cars")
       return callback("ERROR_GETTING_BANANAPEELS_POSITIONS_DATA");
     });   
   };
@@ -155,7 +166,7 @@ var mariokart = (function () {
       ;
     
     mapOptions.center = localmotionHQ;    
-    mapOptions.zoom = 15;
+    mapOptions.zoom = 17;
     
     map = new google.maps.Map(document.getElementById(containerId), mapOptions);
 
@@ -173,7 +184,7 @@ var mariokart = (function () {
   
     // Place banana peels
     bananaPeelsPositions.forEach(function(banana) {
-      var marker =  new google.maps.Marker({ position: new google.maps.LatLng(banana.lat - 0.0008, banana.lon - offset)   // Small hack to center the banana peel roadsign
+      var marker =  new google.maps.Marker({ position: new google.maps.LatLng(banana.lat /*- 0.0008*/, banana.lon - offset)   // Small hack to center the banana peel roadsign
                                            , map: map
                                            , title:"Banana"
                                            , icon: "assets/img/banana-roadsign-small.png"
@@ -182,7 +193,6 @@ var mariokart = (function () {
       currentBananaMarkers.push(marker);
     });  
   };
-  
   
   /**
    * Place all banana roadsigns after removing all stale markers
