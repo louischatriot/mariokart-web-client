@@ -1,3 +1,5 @@
+// Bad Hackathon code with memory leaks everywhere!!!
+
 var mariokart = (function () {
   var apiRoot = "http://localhost:5555"
     , leaderboard = []
@@ -6,8 +8,12 @@ var mariokart = (function () {
     , eventLogAlreadySeen = {}
     , eventLogTemplate = $('#event-log-template').html()
     , bananaPeelsPositions = []
-    , googleMapsAPIKey = "AIzaSyB7WBsXgjBcMbgUCy4jBzmeTJYcF38eSgc"
+    // , googleMapsAPIKey = "AIzaSyB7WBsXgjBcMbgUCy4jBzmeTJYcF38eSgc"
     , localmotionHQ = new google.maps.LatLng(37.567746, -122.325631)
+    , carsPositions = []
+    , map
+    , currentBananaMarkers = []
+    , currentCarsMarkers = []
     ;
 
   this.init = function () {
@@ -30,10 +36,15 @@ var mariokart = (function () {
     
     this.updateBananaPeelsPositions(function (err) {
       if (err) { return; }
-    
-      console.log("=================");
-      console.log(bananaPeelsPositions);
-      self.redrawMap();
+      
+      this.updateCarsPositions(function (err) {
+        if (err) { return; }      
+      
+        console.log("=================");
+        console.log(bananaPeelsPositions);
+        console.log(carsPositions);
+        self.redrawMap();
+      });
     });
   };
 
@@ -121,28 +132,77 @@ var mariokart = (function () {
   };
   
   /**
+   * Update the cars positions
+   */
+  this.updateCarsPositions = function (cb) {
+    var callback = cb || function() {};
+  
+    $.ajax({ url: apiRoot + "/su/mariokart/api/carsPositions" }).done(function (data) {
+      carsPositions = data;
+      return callback(null);
+    }).fail(function () {
+      console.log("Couldn't get the current positions of banana peels")
+      return callback("ERROR_GETTING_BANANAPEELS_POSITIONS_DATA");
+    });   
+  };
+  
+  /**
    * Redraw map
    */
   this.redrawMap = function () {
     var containerId = "live-map"
       , mapOptions = {}
-      , map
       ;
     
     mapOptions.center = localmotionHQ;    
     mapOptions.zoom = 15;
     
     map = new google.maps.Map(document.getElementById(containerId), mapOptions);
-        
-    bananaPeelsPositions.forEach(function(banana) {
-      new google.maps.Marker({ position: new google.maps.LatLng(banana.lat - 0.0008, banana.lon)
-                             , map: map
-                             , title:"Banana"
-                             , icon: "assets/img/banana-roadsign-small.png"
-                             });    
-    });
 
+    this.replaceBananasMarkers();
+    this.replaceCarsMarkers();
   };
+  
+  /**
+   * Place all banana roadsigns after removing all stale markers
+   */
+  this.replaceBananasMarkers = function (_offset) {
+    var offset = _offset || 0;
+  
+    currentBananaMarkers.forEach(function(marker) { marker.setMap(null); });
+  
+    // Place banana peels
+    bananaPeelsPositions.forEach(function(banana) {
+      var marker =  new google.maps.Marker({ position: new google.maps.LatLng(banana.lat - 0.0008, banana.lon - offset)   // Small hack to center the banana peel roadsign
+                                           , map: map
+                                           , title:"Banana"
+                                           , icon: "assets/img/banana-roadsign-small.png"
+                                           });
+                                           
+      currentBananaMarkers.push(marker);
+    });  
+  };
+  
+  
+  /**
+   * Place all banana roadsigns after removing all stale markers
+   */
+  this.replaceCarsMarkers = function (_offset) {
+    var offset = _offset || 0;
+  
+    currentCarsMarkers.forEach(function(marker) { marker.setMap(null); });
+  
+    // Place banana peels
+    carsPositions.forEach(function(car) {
+      var marker =  new google.maps.Marker({ position: new google.maps.LatLng(car.lat, car.lon - offset)
+                                           , map: map
+                                           , title: car.driver.name
+                                           });
+                                           
+      currentCarsMarkers.push(marker);
+    });  
+  };  
+  
   
   // Return mariokart opbject
   return this;
