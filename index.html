@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Mariokart</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>    
+    <link href="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>    
+    <script src="http://momentjs.com/downloads/moment.min.js"></script>
+    <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js"></script>    
+    <script src="lib/js/mustache.js"></script>
+  </head>
+
+  <body>
+    <img src="assets/img/Mario_kart_first_logo.png" alt="Mariokart logo">
+
+      <div id="leaderboard"></div>
+      
+      <div id="event-log"></div>
+    
+    
+    
+    
+      <!-- Templates -->
+      <div id="leaderboard-template" style="display: none;">
+        <h1>Leaderboard</h1>
+        <ul>
+          {{#scores}}
+            <li>{{user.name}}: {{score}}</li>
+          {{/scores}}
+        </ul>
+      </div>
+      
+      
+      <div id="event-log-template" style="display: none;">
+        <h1>Event log</h1>
+        <ul>
+          {{#events}}
+            <li>{{type}}</li>
+          {{/events}}
+        </ul>
+      </div>
+    
+    <script src="js/mariokart.js"></script>
+    <script type="text/javascript">
+      mariokart.init();
+    </script>
+  </body>
+</html>
