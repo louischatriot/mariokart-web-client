@@ -5,6 +5,9 @@ var mariokart = (function () {
     , eventLog = []
     , eventLogAlreadySeen = {}
     , eventLogTemplate = $('#event-log-template').html()
+    , bananaPeelsPositions = []
+    , googleMapsAPIKey = "AIzaSyB7WBsXgjBcMbgUCy4jBzmeTJYcF38eSgc"
+    , localmotionHQ = new google.maps.LatLng(37.567746, -122.325631)
     ;
 
   this.init = function () {
@@ -18,12 +21,19 @@ var mariokart = (function () {
       // self.redrawLeaderboard();
     // });
     
-    
-    
-    this.updateEventLog(function (err) {
-      if (err) { return; }
+
+    // this.updateEventLog(function (err) {
+      // if (err) { return; }
       
-      self.redrawEventLog();
+      // self.redrawEventLog();
+    // });
+    
+    this.updateBananaPeelsPositions(function (err) {
+      if (err) { return; }
+    
+      console.log("=================");
+      console.log(bananaPeelsPositions);
+      self.redrawMap();
     });
   };
 
@@ -95,7 +105,35 @@ var mariokart = (function () {
     $container.html(Mustache.render(eventLogTemplate, { events: events }));
   };
   
+  /**
+   * Update the banana peels positions
+   */
+  this.updateBananaPeelsPositions = function (cb) {
+    var callback = cb || function() {};
   
+    $.ajax({ url: apiRoot + "/su/mariokart/api/bananaPeelsPositions" }).done(function (data) {
+      bananaPeelsPositions = data;
+      return callback(null);
+    }).fail(function () {
+      console.log("Couldn't get the current positions of banana peels")
+      return callback("ERROR_GETTING_BANANAPEELS_POSITIONS_DATA");
+    });  
+  };
+  
+  /**
+   * Redraw map
+   */
+  this.redrawMap = function () {
+    var containerId = "live-map"
+      , mapOptions = {}
+      , map
+      ;
+    
+    mapOptions.center = localmotionHQ;
+    mapOptions.zoom = 15;
+    
+    map = new google.maps.Map(document.getElementById(containerId), mapOptions);
+  };
   
   // Return mariokart opbject
   return this;
