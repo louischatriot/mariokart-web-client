@@ -48,17 +48,7 @@ var mariokart = (function () {
    * Redraw the leaderboard
    */
   this.redrawLeaderboard = function () {
-    var html = ""
-      , $container = $('#leaderboard')
-      ;
-    
-    // html += "<h1>Leaderboard</h1>";
-    // html += "<ul>";
-    // leaderboard.forEach(function (item) {
-      // html += "<li>" + item.user.name + ": " + item.score + "</li>";
-    // });
-    // html += "</ul>";
-    
+    var $container = $('#leaderboard');
     $container.html(Mustache.render(leaderboardTemplate, { scores: leaderboard }));
   };
 
@@ -72,7 +62,9 @@ var mariokart = (function () {
     $.ajax({ url: apiRoot + "/su/mariokart/api/lastEvents" }).done(function (data) {
       data.forEach(function (item) {
         item.timestamp = new Date(item.timestamp);
+        item.timeago = moment(item.timestamp).fromNow();
         item.hashCode = CryptoJS.MD5(JSON.stringify(item)).toString();
+        item[item.type] = true;
       });
       data = data.sort(function (a, b) { return a.timestamp.getTime() - b.timestamp.getTime(); });
       data.forEach(function (item) {
@@ -92,10 +84,15 @@ var mariokart = (function () {
   this.redrawEventLog = function () {
     var $container = $('#event-log')
       , maxDrawnEvents = 100
-      , i
+      , i, events = []
       ;
       
-    $container.html(Mustache.render(eventLogTemplate, { events: eventLog }));
+    for (i = 0; i < Math.min(maxDrawnEvents, eventLog.length); i += 1) {
+      events.push(eventLog[i]);
+    }
+      
+    console.log(events);
+    $container.html(Mustache.render(eventLogTemplate, { events: events }));
   };
   
   
