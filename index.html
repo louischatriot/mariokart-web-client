@@ -49,11 +49,11 @@
           {{#events}}
             <div class="event-log-item">
             {{#SLIPPED_ON_BANANA_PEEL}}
-              {{byUser.name}} slipped on a banana peel dropped by {{additionalData.droppedBy.name}}!
+              <strong>{{byUser.name}} slipped</strong> on a banana peel dropped by <strong>{{additionalData.droppedBy.name}}</strong>!
             {{/SLIPPED_ON_BANANA_PEEL}}
             
             {{#BANANA_PEEL_DROPPED}}
-              {{byUser.name}} dropped a banana peel somewhere
+              <strong>{{byUser.name}} dropped</strong> a banana peel somewhere
             {{/BANANA_PEEL_DROPPED}}
             </div>
           {{/events}}
