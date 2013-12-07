@@ -57,7 +57,7 @@ var mariokart = (function () {
     }, 800);
     
     setTimeout(function () {
-      clearInterval(thei);
+      // clearInterval(thei);
     }, 5000);
   };
 

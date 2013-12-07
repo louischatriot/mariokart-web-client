@@ -8,7 +8,7 @@
 }
 
 .event-log-item {
-  background-color: #86c2f4;
+  background-color: #ddd;
   margin-bottom: 20px;
   margin-left: 0px;
   padding: 10px;
@@ -16,5 +16,5 @@
 }
 
 .event-log-item:first-child {
-  border: solid black 1px;
+  background-color: #86c2f4;
 }
