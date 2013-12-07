@@ -6,3 +6,15 @@
   width: 90%;
   height: 600px;
 }
+
+.event-log-item {
+  background-color: #86c2f4;
+  margin-bottom: 20px;
+  margin-left: 0px;
+  padding: 10px;
+  list-style-type: none;
+}
+
+.event-log-item:first-child {
+  border: solid black 1px;
+}

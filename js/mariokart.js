@@ -2,6 +2,7 @@
 
 var mariokart = (function () {
   var apiRoot = "http://localhost:5555"
+  // var apiRoot = "http://dogfood.getlocalmotion.com"
     , leaderboard = []
     , leaderboardTemplate = $('#leaderboard-template').html()
     , eventLog = []
@@ -56,7 +57,7 @@ var mariokart = (function () {
     }, 800);
     
     setTimeout(function () {
-      // clearInterval(thei);
+      clearInterval(thei);
     }, 5000);
   };
 

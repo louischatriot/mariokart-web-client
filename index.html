@@ -46,9 +46,8 @@
 
       <div id="event-log-template" style="display: none;">
         <h1>Battlefield status</h1>
-        <ul>
           {{#events}}
-            <li>
+            <div class="event-log-item">
             {{#SLIPPED_ON_BANANA_PEEL}}
               {{byUser.name}} slipped on a banana peel dropped by {{additionalData.droppedBy.name}}!
             {{/SLIPPED_ON_BANANA_PEEL}}
@@ -56,9 +55,8 @@
             {{#BANANA_PEEL_DROPPED}}
               {{byUser.name}} dropped a banana peel somewhere
             {{/BANANA_PEEL_DROPPED}}
-            </li>
+            </div>
           {{/events}}
-        </ul>
       </div>
     
     <script src="js/mariokart.js"></script>
